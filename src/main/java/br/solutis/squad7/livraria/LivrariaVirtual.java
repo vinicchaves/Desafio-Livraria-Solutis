@@ -1,6 +1,9 @@
 package br.solutis.squad7.livraria;
 import br.solutis.squad7.livraria.livros.*;
+
+
 import java.util.*;
+
 public class LivrariaVirtual{
     private final int MAX_IMPRESSOS = 10;
     private final int MAX_ELETRONICOS = 20;
@@ -120,5 +123,6 @@ public class LivrariaVirtual{
             }
         } while (opcao != 5);
     }
-
 }
+
+

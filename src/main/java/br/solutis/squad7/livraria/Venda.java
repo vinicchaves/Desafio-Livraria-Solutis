@@ -3,7 +3,9 @@ import javax.persistence.*;
 import java.util.*;
 @Entity
 public class Venda {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Livro> livros = new ArrayList<>();
     private static int numVendas = 0;
