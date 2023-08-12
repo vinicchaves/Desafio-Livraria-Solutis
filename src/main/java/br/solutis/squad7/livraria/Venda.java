@@ -19,7 +19,7 @@ public class Venda {
     }
 
     public void addLivro(Livro livro, int index) {
-        if (index >= 0 && index <= livros.size()) {
+        if (index >= 0) {
             livros.add(index, livro);
             valor += livro.getPreco();
         } else {

@@ -3,20 +3,20 @@ package br.solutis.squad7.livraria.livros;
 import br.solutis.squad7.livraria.Livro;
 
 public class Eletronico extends Livro {
-    private int tamanho;
+    private float tamanho;
 
-    public Eletronico(String titulo, String autores, String editora, float preco, int tamanho) {
+    public Eletronico(String titulo, String autores, String editora, float preco, float tamanho) {
         super(titulo, autores, editora, preco);
         this.tamanho = tamanho;
     }
 
     //setters e getters abaixo
 
-    public int getTamanho() {
+    public float getTamanho() {
         return tamanho;
     }
 
-    public void setTamanho(int tamanho) {
+    public void setTamanho(float tamanho) {
         this.tamanho = tamanho;
     }
 
