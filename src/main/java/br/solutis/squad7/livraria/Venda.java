@@ -1,6 +1,8 @@
 package br.solutis.squad7.livraria;
-import javax.persistence.*;
+
+import jakarta.persistence.*;
 import java.util.*;
+
 @Entity
 public class Venda {
     @Id
