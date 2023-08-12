@@ -9,13 +9,8 @@ import java.util.List;
 
 @Service
 public class VendaService {
-
-    private final VendaRepository vendaRepository;
-
     @Autowired
-    public VendaService(VendaRepository vendaRepository) {
-        this.vendaRepository = vendaRepository;
-    }
+    private VendaRepository vendaRepository;
 
     public Venda salvarVenda(Venda venda) {
         return vendaRepository.save(venda);

@@ -14,13 +14,8 @@ public class LivroService {
 
     private final int MAX_IMPRESSOS = 10;
     private final int MAX_ELETRONICOS = 20;
-
-    private final LivroRepository livroRepository;
-
     @Autowired
-    public LivroService(LivroRepository livroRepository) {
-        this.livroRepository = livroRepository;
-    }
+    private LivroRepository livroRepository;
 
     public void cadastrarLivroImpresso(Impresso livroImpresso) {
         if (listarLivrosImpressos().size() >= MAX_IMPRESSOS) {
