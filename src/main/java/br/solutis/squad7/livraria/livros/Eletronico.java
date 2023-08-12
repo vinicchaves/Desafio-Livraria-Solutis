@@ -2,6 +2,11 @@ package br.solutis.squad7.livraria.livros;
 
 import br.solutis.squad7.livraria.Livro;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("Eletronico")
 public class Eletronico extends Livro {
     private float tamanho;
 
@@ -9,8 +14,6 @@ public class Eletronico extends Livro {
         super(titulo, autores, editora, preco);
         this.tamanho = tamanho;
     }
-
-    //setters e getters abaixo
 
     public float getTamanho() {
         return tamanho;
@@ -20,6 +23,9 @@ public class Eletronico extends Livro {
         this.tamanho = tamanho;
     }
 
+    public String getTipo() {
+        return "Eletrônico";
+    }
 
     @Override
     public String toString() {

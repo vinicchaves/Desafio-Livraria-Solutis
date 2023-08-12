@@ -2,6 +2,11 @@ package br.solutis.squad7.livraria.livros;
 
 import br.solutis.squad7.livraria.Livro;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("Impresso")
 public class Impresso extends Livro {
     private float frete;
     private int estoque;
@@ -45,6 +50,9 @@ public class Impresso extends Livro {
         if (estoque > 0) {
             estoque--;
         }
+    }
 
+    public String getTipo() {
+        return "Impresso";
     }
 }

@@ -1,12 +1,11 @@
 package br.solutis.squad7.livraria;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
 public abstract class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +63,8 @@ public abstract class Livro {
     public void setPreco(float preco) {
         this.preco = preco;
     }
+
+    public abstract String getTipo();
 
     public String toString() {
         return "Título: " + titulo +
