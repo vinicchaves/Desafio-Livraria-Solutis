@@ -1,10 +1,16 @@
 package br.solutis.squad7.livraria;
+import br.solutis.squad7.livraria.repository.VendaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import br.solutis.squad7.livraria.livros.*;
-
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class LivrariaVirtual{
+
+    @Autowired
+    private VendaRepository vendaRepository;
     private final int MAX_IMPRESSOS = 10;
     private final int MAX_ELETRONICOS = 20;
     private final int MAX_VENDAS = 50;
@@ -81,17 +87,13 @@ public class LivrariaVirtual{
 
 
     public void realizarVenda() {
-        String cliente;
-        int qtdLivros;
-        int opcao;
-
         Scanner sc = new Scanner(System.in);
         System.out.print("Digite o nome do cliente: ");
-        cliente = sc.next();
-        System.out.println("Quantidade de livros a ser comprado: ");
-        qtdLivros = sc.nextInt();
+        String cliente = sc.next();
+        System.out.print("Quantidade de livros a ser comprado: ");
+        int qtdLivros = sc.nextInt();
         System.out.print("Digite a opção de venda:\n1. Livro Impresso\n2. Livro Eletrônico\n3. Ambos\nEscolha uma opção: ");
-        opcao = sc.nextInt();
+        int opcao = sc.nextInt();
 
         if (opcao != 1 && opcao != 2 && opcao != 3) {
             System.out.println("Opção inválida.");
@@ -134,7 +136,7 @@ public class LivrariaVirtual{
                 }
             }
 
-            vendas.add(venda);
+            vendaRepository.save(venda);
             System.out.println("Venda realizada com sucesso!");
         }
 
