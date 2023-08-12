@@ -2,7 +2,6 @@ package br.solutis.squad7.livraria;
 
 import jakarta.persistence.*;
 
-
 @Entity
 public abstract class Livro {
     @Id

@@ -1,9 +1,7 @@
 package br.solutis.squad7.livraria.LivroDAO;
 
 import br.solutis.squad7.livraria.*;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
+import jakarta.persistence.*;
 public class LivroDAO {
     private EntityManager entityManager;
 
