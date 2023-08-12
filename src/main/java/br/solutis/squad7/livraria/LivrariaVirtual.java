@@ -99,46 +99,71 @@ public class LivrariaVirtual{
             System.out.println("Opção inválida.");
             return;
         }
-        if (opcao == 3) {
-            listarLivrosImpressos();
-            listarLivrosEletronicos();
 
-            Venda venda = new Venda();
-            venda.setCliente(cliente);
+        if (opcao < 1 || opcao > 3) {
+            System.out.println("Opção inválida.");
+            return;
+        }
 
-            for (int i = 0; i < qtdLivros; i++) {
-                System.out.print("Digite o tipo do livro a ser comprado (1 - Impresso, 2 - Eletrônico): ");
-                int tipoLivro = sc.nextInt();
+        List<Livro> livrosDisponiveis = new ArrayList<>();
+        if (opcao == 1 || opcao == 3) {
+            livrosDisponiveis.addAll(impressos);
+        }
+        if (opcao == 2 || opcao == 3) {
+            livrosDisponiveis.addAll(eletronicos);
+        }
 
-                if (tipoLivro == 1) {
-                    System.out.print("Digite o ID do livro impresso: ");
-                    int idImpresso = sc.nextInt();
-                    Impresso livroImpresso = getImpressoById(idImpresso);
-                    if (livroImpresso != null) {
-                        venda.addLivro(livroImpresso, i);
-                    } else {
-                        System.out.println("Livro impresso não encontrado.");
-                        i--; // Decrementar o contador para repetir a iteração
-                    }
-                } else if (tipoLivro == 2) {
-                    System.out.print("Digite o ID do livro eletrônico: ");
-                    int idEletronico = sc.nextInt();
-                    Eletronico livroEletronico = getEletronicoById(idEletronico);
-                    if (livroEletronico != null) {
-                        venda.addLivro(livroEletronico, i);
-                    } else {
-                        System.out.println("Livro eletrônico não encontrado.");
-                        i--; // Decrementar o contador para repetir a iteração
-                    }
-                } else {
-                    System.out.println("Tipo de livro inválido.");
-                    i--; // Decrementar o contador para repetir a iteração
+        if (livrosDisponiveis.isEmpty()) {
+            System.out.println("Não há livros disponíveis para venda.");
+            return;
+        }
+
+        System.out.println("Livros disponíveis:");
+        for (Livro livro : livrosDisponiveis) {
+            System.out.printf("[%d] %s\n", livro.getId(), livro.getTitulo());
+        }
+
+        Venda venda = new Venda();
+        venda.setCliente(cliente);
+
+        for (int i = 0; i < qtdLivros; i++) {
+            System.out.print("Digite o ID do livro: ");
+            int livroId = sc.nextInt();
+
+            Livro livroEscolhido = null;
+            for (Livro livro : livrosDisponiveis) {
+                if (livro.getId() == livroId) {
+                    livroEscolhido = livro;
+                    break;
                 }
             }
 
+            if (livroEscolhido == null) {
+                System.out.println("Livro não encontrado.");
+                i--; // Tentar novamente
+            } else {
+                if (livroEscolhido instanceof Impresso) {
+                    Impresso livroImpresso = (Impresso) livroEscolhido;
+                    if (livroImpresso.getEstoque() <= 0) {
+                        System.out.println("Livro impresso sem estoque.");
+                        i--; // Tentar novamente
+                    } else {
+                        venda.addLivro(livroImpresso, i);
+                        livroImpresso.atualizarEstoque();
+                    }
+                } else if (livroEscolhido instanceof Eletronico) {
+                    venda.addLivro((Eletronico) livroEscolhido, i);
+                }
+            }
+        }
+
+        if (venda.listarLivros().isEmpty()) {
+            System.out.println("Nenhum livro adicionado à venda.");
+            return;
+        }
+
             vendaRepository.save(venda);
             System.out.println("Venda realizada com sucesso!");
-        }
 
     }
 
