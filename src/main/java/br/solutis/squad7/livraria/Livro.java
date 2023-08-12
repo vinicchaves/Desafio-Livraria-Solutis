@@ -14,12 +14,12 @@ public abstract class Livro {
     private String titulo;
     private String autores;
     private String editora;
-    private double preco;
+    private float preco;
 
     public Livro(){
 
     }
-    public Livro(String titulo, String autores, String editora, double preco) {
+    public Livro(String titulo, String autores, String editora, float preco) {
         this.titulo = titulo;
         this.autores = autores;
         this.editora = editora;
@@ -57,11 +57,11 @@ public abstract class Livro {
         this.editora = editora;
     }
 
-    public double getPreco() {
+    public float getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(float preco) {
         this.preco = preco;
     }
 

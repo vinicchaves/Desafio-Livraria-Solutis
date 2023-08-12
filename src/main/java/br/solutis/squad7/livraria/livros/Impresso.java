@@ -1,7 +1,9 @@
-package br.solutis.squad7.livraria;
+package br.solutis.squad7.livraria.livros;
+
+import br.solutis.squad7.livraria.Livro;
 
 public class Impresso extends Livro {
-    private double frete;
+    private float frete;
     private int estoque;
 
 
@@ -9,7 +11,7 @@ public class Impresso extends Livro {
 
     }
 
-    public Impresso(String titulo, String autores, String editora, double preco, double frete, int estoque) {
+    public Impresso(String titulo, String autores, String editora, float preco, float frete, int estoque) {
         super(titulo, autores, editora, preco);
         this.frete = frete;
         this.estoque = estoque;
@@ -17,11 +19,11 @@ public class Impresso extends Livro {
 
     // setters e getters
 
-    public double getFrete() {
+    public float getFrete() {
         return frete;
     }
 
-    public void setFrete(double frete) {
+    public void setFrete(float frete) {
         this.frete = frete;
     }
 
