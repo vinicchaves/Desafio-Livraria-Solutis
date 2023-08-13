@@ -32,8 +32,25 @@ public class MenuService {
                     livraria.realizarVenda();
                     break;
                 case 3:
-                    livraria.listarLivrosConsole();
-                    break;
+                    System.out.println("Selecione uma opção:");
+                    System.out.println("1. Listar todos os livros");
+                    System.out.println("2. Listar livros impressos");
+                    System.out.println("3. Listar livros eletrônicos");
+                    int listarOpcao = scanner.nextInt();
+                    switch (listarOpcao) {
+                        case 1:
+                            livraria.listarLivrosConsole();
+                            break;
+                        case 2:
+                            livraria.listarLivrosImpressos();
+                            break;
+                        case 3:
+                            livraria.listarLivrosEletronicos();
+                            break;
+                        default:
+                            System.out.println("Opção inválida. Escolha uma opção válida.");
+                            break;
+                    }
                 case 4:
                     livraria.listarVendas();
                     break;
