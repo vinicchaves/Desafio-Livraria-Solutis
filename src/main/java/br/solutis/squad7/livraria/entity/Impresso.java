@@ -1,16 +1,14 @@
-package br.solutis.squad7.livraria.livros;
+package br.solutis.squad7.livraria.entity;
 
-import br.solutis.squad7.livraria.Livro;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
 @DiscriminatorValue("Impresso")
 public class Impresso extends Livro {
+    @Column(name = "frete")
     private float frete;
+    @Column(name = "estoque")
     private int estoque;
-
 
     public Impresso() {
 
@@ -21,6 +19,7 @@ public class Impresso extends Livro {
         this.frete = frete;
         this.estoque = estoque;
     }
+
 
     // setters e getters
 

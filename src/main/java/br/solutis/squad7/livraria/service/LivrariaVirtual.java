@@ -1,15 +1,23 @@
-package br.solutis.squad7.livraria;
-import br.solutis.squad7.livraria.repository.*;
+package br.solutis.squad7.livraria.service;
+import br.solutis.squad7.livraria.entity.Eletronico;
+import br.solutis.squad7.livraria.entity.Impresso;
+import br.solutis.squad7.livraria.entity.Livro;
+import br.solutis.squad7.livraria.entity.Venda;
 import br.solutis.squad7.livraria.service.LivroService;
 import br.solutis.squad7.livraria.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import br.solutis.squad7.livraria.livros.*;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Component
-public class LivrariaVirtual{
+@Service
+public class LivrariaVirtual {
+
+    private final int MAX_IMPRESSOS = 10;
+    private final int MAX_ELETRONICOS = 20;
+    private final int MAX_VENDAS = 50;
+    private List<Venda> vendas;
 
     @Autowired
     private LivroService livroService;
@@ -17,17 +25,6 @@ public class LivrariaVirtual{
     @Autowired
     private VendaService vendaService;
 
-
-    private final int MAX_IMPRESSOS = 10;
-    private final int MAX_ELETRONICOS = 20;
-    private final int MAX_VENDAS = 50;
-    private List<Venda> vendas;
-
-
-    @Autowired
-    public LivrariaVirtual() {
-
-    }
 
     public void cadastrarLivro() {
         Scanner sc = new Scanner(System.in);
@@ -254,46 +251,4 @@ public class LivrariaVirtual{
         System.out.println("+--------+---------------------+----------------------+-------+---------+---------+");
     }
 
-
-
-    public static void main(String[] args) {
-        LivrariaVirtual livraria = new LivrariaVirtual();
-
-        Scanner scanner = new Scanner(System.in);
-        int opcao;
-
-        do {
-            System.out.println("Menu:");
-            System.out.println("1. Cadastrar Livro");
-            System.out.println("2. Realizar Venda");
-            System.out.println("3. Listar Livros");
-            System.out.println("4. Listar Vendas");
-            System.out.println("5. Sair");
-            System.out.print("Escolha uma opção: ");
-            opcao = scanner.nextInt();
-
-            switch (opcao) {
-                case 1:
-                    livraria.cadastrarLivro();
-                    break;
-                case 2:
-                    livraria.realizarVenda();
-                    break;
-                case 3:
-                    livraria.listarLivros();
-                    break;
-                case 4:
-                    livraria.listarVendas();
-                    break;
-                case 5:
-                    System.out.println("Saindo do programa...");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Escolha uma opção válida.");
-                    break;
-            }
-        } while (opcao != 5);
-    }
 }
-
-

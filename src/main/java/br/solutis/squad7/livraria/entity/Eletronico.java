@@ -1,15 +1,18 @@
-package br.solutis.squad7.livraria.livros;
+package br.solutis.squad7.livraria.entity;
 
-import br.solutis.squad7.livraria.Livro;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @DiscriminatorValue("Eletronico")
 public class Eletronico extends Livro {
+    @Column(name = "tamanho")
     private float tamanho;
 
+    public Eletronico() {
+    }
     public Eletronico(String titulo, String autores, String editora, float preco, float tamanho) {
         super(titulo, autores, editora, preco);
         this.tamanho = tamanho;

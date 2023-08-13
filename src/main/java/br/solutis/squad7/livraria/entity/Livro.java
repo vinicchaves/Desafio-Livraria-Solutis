@@ -1,11 +1,11 @@
-package br.solutis.squad7.livraria;
+package br.solutis.squad7.livraria.entity;
 
-import javax.persistence.*;
-
+import jakarta.persistence.*;
 
 @Entity
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING,
+        name = "tipo")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
 public abstract class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,7 @@ public abstract class Livro {
         this.editora = editora;
         this.preco = preco;
     }
+
     //setters e getters abaixo
     public Long getId() {
         return id;
@@ -63,8 +64,6 @@ public abstract class Livro {
     public void setPreco(float preco) {
         this.preco = preco;
     }
-
-    public abstract String getTipo();
 
     public String toString() {
         return "Título: " + titulo +

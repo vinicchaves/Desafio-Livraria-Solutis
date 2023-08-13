@@ -1,6 +1,6 @@
 package br.solutis.squad7.livraria.service;
 
-import br.solutis.squad7.livraria.Venda;
+import br.solutis.squad7.livraria.entity.Venda;
 import br.solutis.squad7.livraria.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 package br.solutis.squad7.livraria.service;
 
-import br.solutis.squad7.livraria.Livro;
-import br.solutis.squad7.livraria.livros.Eletronico;
-import br.solutis.squad7.livraria.livros.Impresso;
+import br.solutis.squad7.livraria.entity.Eletronico;
+import br.solutis.squad7.livraria.entity.Impresso;
+import br.solutis.squad7.livraria.entity.Livro;
 import br.solutis.squad7.livraria.repository.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +14,7 @@ public class LivroService {
 
     private final int MAX_IMPRESSOS = 10;
     private final int MAX_ELETRONICOS = 20;
+
     @Autowired
     private LivroRepository livroRepository;
 
@@ -32,11 +33,11 @@ public class LivroService {
     }
 
     public List<Livro> listarLivrosImpressos() {
-        return livroRepository.findByTipo("impresso"); // Supondo que você tenha um campo "tipo" no banco de dados para distinguir os tipos
+        return livroRepository.findImpressosBy(); // Supondo que você tenha um campo "tipo" no banco de dados para distinguir os tipos
     }
 
     public List<Livro> listarLivrosEletronicos() {
-        return livroRepository.findByTipo("eletronico"); // Supondo que você tenha um campo "tipo" no banco de dados para distinguir os tipos
+        return livroRepository.findEletronicosBy(); // Supondo que você tenha um campo "tipo" no banco de dados para distinguir os tipos
     }
 
 }
