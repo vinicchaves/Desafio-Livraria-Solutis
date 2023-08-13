@@ -3,10 +3,7 @@ import br.solutis.squad7.livraria.entity.Eletronico;
 import br.solutis.squad7.livraria.entity.Impresso;
 import br.solutis.squad7.livraria.entity.Livro;
 import br.solutis.squad7.livraria.entity.Venda;
-import br.solutis.squad7.livraria.service.LivroService;
-import br.solutis.squad7.livraria.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,7 +28,7 @@ public class LivrariaVirtual {
         System.out.println("Selecione o tipo de livro a ser cadastrado:\n1. Livro Impresso\n2. Livro Eletrônico\n3. Ambos\nEscolha uma opção: ");
         int opcao = sc.nextInt();
 
-        if (opcao != 1 && opcao != 2 && opcao != 3) {
+        if (opcao < 1 || opcao > 3) {
             System.out.println("Opção inválida.");
             return;
         }
@@ -42,24 +39,17 @@ public class LivrariaVirtual {
             return;
         }
 
-        if (opcao == 1 || opcao == 3) {
-            if (opcao == 1 && livroService.listarLivrosImpressos().size() >= MAX_IMPRESSOS) {
-                System.out.println("Não é possível cadastrar mais livros impressos. Capacidade máxima atingida.");
-            } else {
-                cadastrarLivroImpresso(sc);
-            }
+        if ((opcao == 1 || opcao == 3) && !cadastrarLivroImpresso(sc)) {
+            return;
         }
 
-        if (opcao == 2 || opcao == 3) {
-            if (opcao == 2 && livroService.listarLivrosEletronicos().size() >= MAX_ELETRONICOS) {
-                System.out.println("Não é possível cadastrar mais livros eletrônicos. Capacidade máxima atingida.");
-            } else {
-                cadastrarLivroEletronico(sc);
-            }
+        if ((opcao == 2 || opcao == 3) && !cadastrarLivroEletronico(sc)) {
+            return;
         }
     }
 
-    private void cadastrarLivroImpresso(Scanner sc) {
+
+    private boolean cadastrarLivroImpresso(Scanner sc) {
         System.out.print("Digite o título do livro impresso: ");
         String titulo = sc.next();
         System.out.print("Digite o autor(es) do livro impresso: ");
@@ -76,9 +66,10 @@ public class LivrariaVirtual {
         Impresso novoImpresso = new Impresso(titulo, autores, editora, preco, frete, estoque);
         livroService.cadastrarLivroImpresso(novoImpresso);
         System.out.println("Livro impresso cadastrado com sucesso!");
+        return true;
     }
 
-    private void cadastrarLivroEletronico(Scanner sc) {
+    private boolean cadastrarLivroEletronico(Scanner sc) {
         System.out.print("Digite o título do livro eletrônico: ");
         String titulo = sc.next();
         System.out.print("Digite o autor(es) do livro eletrônico: ");
@@ -93,6 +84,7 @@ public class LivrariaVirtual {
         Eletronico novoEletronico = new Eletronico(titulo, autores, editora, preco, tamanho);
         livroService.cadastrarLivroEletronico(novoEletronico);
         System.out.println("Livro eletrônico cadastrado com sucesso!");
+        return true;
     }
 
     public void realizarVenda() {
@@ -172,39 +164,15 @@ public class LivrariaVirtual {
             System.out.println("Venda realizada com sucesso!");
         }
     }
-
+    public void listarLivrosConsole() {
+        listarLivros(livroService.listarTodosTipos());
+    }
     public void listarLivrosImpressos() {
-        List<Livro> livros = livroService.listarLivrosImpressos();
-
-        System.out.println("Lista de Livros Impressos:");
-        System.out.println("+------+---------------------+----------------------+-------+---------+");
-        System.out.println("| ID   |       Título        |       Autores        | Preço | Estoque |");
-        System.out.println("+------+---------------------+----------------------+-------+---------+");
-        for (Livro livro : livros) {
-            if (livro instanceof Impresso) {
-                Impresso impresso = (Impresso) livro;
-                System.out.printf("| %-4d | %-19s | %-20s | %-5.2f | %-7d |%n",
-                        impresso.getId(), impresso.getTitulo(), impresso.getAutores(), impresso.getPreco(), impresso.getEstoque());
-            }
-        }
-        System.out.println("+------+---------------------+----------------------+-------+---------+");
+        listarLivros(livroService.listarLivrosImpressos());
     }
 
     public void listarLivrosEletronicos() {
-        List<Livro> livros = livroService.listarLivrosEletronicos();
-
-        System.out.println("Lista de Livros Eletrônicos:");
-        System.out.println("+------+---------------------+----------------------+-------+---------+");
-        System.out.println("| ID   |       Título        |       Autores        | Preço | Tamanho |");
-        System.out.println("+------+---------------------+----------------------+-------+---------+");
-        for (Livro livro : livros) {
-            if (livro instanceof Eletronico) {
-                Eletronico eletronico = (Eletronico) livro;
-                System.out.printf("| %-4d | %-19s | %-20s | %-5.2f | %-7d |%n",
-                        eletronico.getId(), eletronico.getTitulo(), eletronico.getAutores(), eletronico.getPreco(), eletronico.getTamanho());
-            }
-        }
-        System.out.println("+------+---------------------+----------------------+-------+---------+");
+        listarLivros(livroService.listarLivrosEletronicos());
     }
 
     public void listarVendas() {
@@ -220,35 +188,29 @@ public class LivrariaVirtual {
         System.out.println("+-------+---------+-------------+---------------+");
     }
 
-    public void listarLivros() {
-        List<Livro> livros = livroService.listarLivrosImpressos();
-        List<Impresso> impressos = new ArrayList<>();
-        List<Eletronico> eletronicos = new ArrayList<>();
-
-        for (Livro livro : livros) {
-            if (livro instanceof Impresso) {
-                impressos.add((Impresso) livro);
-            } else if (livro instanceof Eletronico) {
-                eletronicos.add((Eletronico) livro);
-            }
-        }
-
+    private void listarLivros(List<Livro> livros) {
         System.out.println("Listagem de Livros:");
         System.out.println("+--------+---------------------+----------------------+-------+---------+---------+");
         System.out.println("| Tipo   |       Título        |       Autores        | Preço | Estoque | Tamanho |");
         System.out.println("+--------+---------------------+----------------------+-------+---------+---------+");
 
-        for (Impresso impresso : impressos) {
-            System.out.printf("| Impresso | %-19s | %-20s | %-5.2f | %-7d |         |%n",
-                    impresso.getTitulo(), impresso.getAutores(), impresso.getPreco(), impresso.getEstoque());
-        }
-
-        for (Eletronico eletronico : eletronicos) {
-            System.out.printf("| Eletrônico | %-17s | %-20s | %-5.2f |         | %-7d |%n",
-                    eletronico.getTitulo(), eletronico.getAutores(), eletronico.getPreco(), eletronico.getTamanho());
+        for (Livro livro : livros) {
+            if (livro instanceof Impresso) {
+                Impresso impresso = (Impresso) livro;
+                System.out.printf("| Impresso | %-19s | %-20s | %-5.2f | %-7d |         |%n",
+                        impresso.getTitulo(), impresso.getAutores(), impresso.getPreco(), impresso.getEstoque());
+            } else if (livro instanceof Eletronico) {
+                Eletronico eletronico = (Eletronico) livro;
+                System.out.printf("| Eletrônico | %-17s | %-20s | %-5.2f |         | %-7.2f |%n",
+                        eletronico.getTitulo(), eletronico.getAutores(), eletronico.getPreco(), eletronico.getTamanho());
+            }
         }
 
         System.out.println("+--------+---------------------+----------------------+-------+---------+---------+");
+
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro disponível.");
+        }
     }
 
 }

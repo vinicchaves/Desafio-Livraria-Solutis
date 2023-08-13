@@ -1,6 +1,5 @@
 package br.solutis.squad7.livraria.service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -33,7 +32,7 @@ public class MenuService {
                     livraria.realizarVenda();
                     break;
                 case 3:
-                    livraria.listarLivros();
+                    livraria.listarLivrosConsole();
                     break;
                 case 4:
                     livraria.listarVendas();

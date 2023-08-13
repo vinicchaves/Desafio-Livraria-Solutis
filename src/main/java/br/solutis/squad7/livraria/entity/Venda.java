@@ -2,6 +2,7 @@ package br.solutis.squad7.livraria.entity;
 
 import jakarta.persistence.*;
 import java.util.*;
+
 @Entity(name = "venda")
 @Table(name = "vendas")
 public class Venda {
