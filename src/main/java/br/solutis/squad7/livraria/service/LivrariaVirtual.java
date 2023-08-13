@@ -50,12 +50,13 @@ public class LivrariaVirtual {
 
 
     private boolean cadastrarLivroImpresso(Scanner sc) {
+        sc.nextLine(); // limpar buffer
         System.out.print("Digite o título do livro impresso: ");
-        String titulo = sc.next();
+        String titulo = sc.nextLine();
         System.out.print("Digite o autor(es) do livro impresso: ");
-        String autores = sc.next();
+        String autores = sc.nextLine();
         System.out.print("Digite a editora do livro impresso: ");
-        String editora = sc.next();
+        String editora = sc.nextLine();
         System.out.print("Digite o preço do livro impresso: ");
         float preco = sc.nextFloat();
         System.out.print("Digite o frete do livro impresso: ");
@@ -70,12 +71,13 @@ public class LivrariaVirtual {
     }
 
     private boolean cadastrarLivroEletronico(Scanner sc) {
+        sc.nextLine(); // limpar buffer
         System.out.print("Digite o título do livro eletrônico: ");
-        String titulo = sc.next();
+        String titulo = sc.nextLine();
         System.out.print("Digite o autor(es) do livro eletrônico: ");
-        String autores = sc.next();
+        String autores = sc.nextLine();
         System.out.print("Digite a editora do livro eletrônico: ");
-        String editora = sc.next();
+        String editora = sc.nextLine();
         System.out.print("Digite o preço do livro eletrônico: ");
         float preco = sc.nextFloat();
         System.out.print("Digite o tamanho do livro eletrônico: ");
@@ -88,9 +90,10 @@ public class LivrariaVirtual {
     }
 
     public void realizarVenda() {
+
         Scanner sc = new Scanner(System.in);
         System.out.print("Digite o nome do cliente: ");
-        String cliente = sc.next();
+        String cliente = sc.nextLine();
         System.out.print("Quantidade de livros a ser comprado: ");
         int qtdLivros = sc.nextInt();
         System.out.print("Digite a opção de venda:\n1. Livro Impresso\n2. Livro Eletrônico\n3. Ambos\nEscolha uma opção: ");
@@ -191,7 +194,7 @@ public class LivrariaVirtual {
     private void listarLivros(List<Livro> livros) {
         System.out.println("Listagem de Livros:");
         System.out.println("+--------+---------------------+----------------------+-------+---------+---------+");
-        System.out.println("| Tipo   |       Título        |       Autores        | Preço | Estoque | Tamanho |");
+        System.out.println("| Tipo   |       Título        |       Autores        | Preço | Estoque | Tamanho (KB) |");
         System.out.println("+--------+---------------------+----------------------+-------+---------+---------+");
 
         for (Livro livro : livros) {

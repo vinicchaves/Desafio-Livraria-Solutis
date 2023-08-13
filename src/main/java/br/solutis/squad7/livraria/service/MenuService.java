@@ -56,6 +56,7 @@ public class MenuService {
                     break;
                 case 5:
                     System.out.println("Saindo do programa...");
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Opção inválida. Escolha uma opção válida.");
