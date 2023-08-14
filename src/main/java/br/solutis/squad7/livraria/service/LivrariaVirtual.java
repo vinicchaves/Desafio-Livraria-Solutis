@@ -4,6 +4,7 @@ import br.solutis.squad7.livraria.entity.Impresso;
 import br.solutis.squad7.livraria.entity.Livro;
 import br.solutis.squad7.livraria.entity.Venda;
 import br.solutis.squad7.livraria.repository.LivroRepository;
+import br.solutis.squad7.livraria.util.LeituraUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,8 @@ public class LivrariaVirtual {
 
     @Autowired
     LivroRepository livroRepository;
+    @Autowired
+    LeituraUtil leituraUtil;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -58,58 +61,22 @@ public class LivrariaVirtual {
             return;
         }
     }
-    private String lerString(Scanner sc, String mensagem) {
-        System.out.print(mensagem);
-        return sc.nextLine();
-    }
 
-    private float lerFloatPositivo(Scanner sc, String mensagem) {
-        while (true) {
-            System.out.print(mensagem);
-            if (sc.hasNextFloat()) {
-                float valor = sc.nextFloat();
-                if (valor >= 0) {
-                    return valor;
-                } else {
-                    System.out.println("O valor deve ser maior ou igual a zero.");
-                }
-            } else {
-                System.out.println("Entrada inválida. Certifique-se de inserir um valor numérico.");
-                sc.next();
-            }
-        }
-    }
-
-    private int lerIntPositivo(Scanner sc, String mensagem) {
-        while (true) {
-            System.out.print(mensagem);
-            if (sc.hasNextInt()) {
-                int valor = sc.nextInt();
-                if (valor >= 0) {
-                    return valor;
-                } else {
-                    System.out.println("O valor deve ser maior ou igual a zero.");
-                }
-            } else {
-                System.out.println("Entrada inválida. Certifique-se de inserir um valor numérico inteiro.");
-                sc.next();
-            }
-        }
-    }
 
     private boolean cadastrarLivroImpresso(Scanner sc) {
         sc.nextLine(); // Limpar buffer
         boolean entradaValida = false;
 
+
         while (!entradaValida) {
             try {
-                String titulo = lerString(sc, "Digite o título do livro impresso: ");
-                String autores = lerString(sc, "Digite o autor(es) do livro impresso: ");
-                String editora = lerString(sc, "Digite a editora do livro impresso: ");
+                String titulo = LeituraUtil.lerString(sc, "Digite o título do livro impresso: ");
+                String autores = LeituraUtil.lerString(sc, "Digite o autor(es) do livro impresso: ");
+                String editora = LeituraUtil.lerString(sc, "Digite a editora do livro impresso: ");
 
-                float preco = lerFloatPositivo(sc, "Digite o preço do livro impresso: ");
-                float frete = lerFloatPositivo(sc, "Digite o frete do livro impresso: ");
-                int estoque = lerIntPositivo(sc, "Digite o estoque do livro impresso: ");
+                float preco = LeituraUtil.lerFloatPositivo(sc, "Digite o preço do livro impresso: ");
+                float frete = LeituraUtil.lerFloatPositivo(sc, "Digite o frete do livro impresso: ");
+                int estoque = LeituraUtil.lerIntPositivo(sc, "Digite o estoque do livro impresso: ");
 
                 Impresso novoImpresso = new Impresso(titulo, autores, editora, preco, frete, estoque);
                 livroService.cadastrarLivroImpresso(novoImpresso);
@@ -134,12 +101,12 @@ public class LivrariaVirtual {
 
         while (!entradaValida) {
             try {
-                String titulo = lerString(sc, "Digite o título do livro eletrônico: ");
-                String autores = lerString(sc, "Digite o autor(es) do livro eletrônico: ");
-                String editora = lerString(sc, "Digite a editora do livro eletrônico: ");
+                String titulo = LeituraUtil.lerString(sc, "Digite o título do livro eletrônico: ");
+                String autores = LeituraUtil.lerString(sc, "Digite o autor(es) do livro eletrônico: ");
+                String editora = LeituraUtil.lerString(sc, "Digite a editora do livro eletrônico: ");
 
-                float preco = lerFloatPositivo(sc, "Digite o preço do livro eletrônico: ");
-                float tamanho = lerFloatPositivo(sc, "Digite o tamanho do livro eletrônico: ");
+                float preco = LeituraUtil.lerFloatPositivo(sc, "Digite o preço do livro eletrônico: ");
+                float tamanho = LeituraUtil.lerFloatPositivo(sc, "Digite o tamanho do livro eletrônico: ");
 
                 Eletronico novoEletronico = new Eletronico(titulo, autores, editora, preco, tamanho);
                 livroService.cadastrarLivroEletronico(novoEletronico);
@@ -162,12 +129,11 @@ public class LivrariaVirtual {
     public void realizarVenda() {
         try {
             Scanner sc = new Scanner(System.in);
-            System.out.print("Digite o nome do cliente: ");
-            String cliente = sc.nextLine();
-            System.out.print("Quantidade de livros a ser comprado: ");
-            int qtdLivros = sc.nextInt();
-            System.out.print("Digite a opção de venda:\n1. Livro Impresso\n2. Livro Eletrônico\n3. Ambos\nEscolha uma opção: ");
-            int opcao = sc.nextInt();
+
+            String cliente = LeituraUtil.lerString(sc, "Digite o nome do cliente: ");
+            int qtdLivros = LeituraUtil.lerIntPositivo(sc, "Quantidade de livros a ser comprado: ");
+            int opcao = LeituraUtil.lerIntPositivo(sc, "Digite a opção de venda:\n1. Livro Impresso\n2. Livro Eletrônico\n3. Ambos\nEscolha uma opção: ");
+
 
             if (opcao != 1 && opcao != 2 && opcao != 3) {
                 System.out.println("Opção inválida.");
