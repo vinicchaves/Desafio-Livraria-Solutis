@@ -2,6 +2,7 @@ package br.solutis.squad7.livraria.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 @Service
@@ -11,9 +12,11 @@ public class MenuService {
     private LivrariaVirtual livraria;
 
     public void iniciarMenu() {
-        Scanner scanner = new Scanner(System.in);
 
+        Scanner scanner = new Scanner(System.in);
+try{
         while (true) {
+
             exibirMenu();
             int opcao = scanner.nextInt();
             scanner.nextLine(); // Limpar o buffer
@@ -32,9 +35,22 @@ public class MenuService {
                     System.out.println("Saindo do programa...");
                     return; // Sair do método
                 }
+
                 default -> System.out.println("Opção inválida. Escolha uma opção válida.");
             }
         }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Certifique-se de inserir valores numéricos corretamente.");
+                iniciarMenu();
+
+            } catch (Exception e) {
+                System.out.println("Ocorreu um erro inesperado.");
+                e.printStackTrace();
+                iniciarMenu();
+            }
+
+
+
     }
 
     private void exibirMenu() {
