@@ -272,35 +272,38 @@ public class LivrariaVirtual {
     }
 
     private void listarLivros(List<Livro> livros) {
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro disponível.");
+            return;
+        }
 
+        System.out.println("+------------+---------------------+----------------------+-------+---------+");
+        System.out.println("|    Tipo    |       Título        |       Autores        | Preço | Estoque |");
+        System.out.println("+------------+---------------------+----------------------+-------+---------+");
 
         for (Livro livro : livros) {
             if (livro instanceof Impresso) {
                 Impresso impresso = (Impresso) livro;
-                System.out.println("Listagem de Livros Impressos:");
-                System.out.println("+------------+---------------------+----------------------+-------+---------+");
-                System.out.println("|    Tipo    |       Título        |       Autores        | Preço | Estoque |");
-                System.out.println("+------------+---------------------+----------------------+-------+---------+");
-                System.out.printf("| Impresso   | %-19s | %-20s | %-5.2f | %-7d |%n",
-                        impresso.getTitulo(), impresso.getAutores(), impresso.getPreco(), impresso.getEstoque());
-                System.out.println("+------------+---------------------+----------------------+-------+---------+");
+                imprimirLivro("Impresso", encurtarTexto(impresso.getTitulo(), 19), encurtarTexto(impresso.getAutores(), 20), impresso.getPreco(), impresso.getEstoque());
             } else if (livro instanceof Eletronico) {
                 Eletronico eletronico = (Eletronico) livro;
-                System.out.println("Listagem de Livros Eletrônicos:");
-                System.out.println("+------------+---------------------+----------------------+-------+--------------+");
-                System.out.println("|    Tipo    |       Título        |       Autores        | Preço | Tamanho (KB) |");
-                System.out.println("+------------+---------------------+----------------------+-------+--------------+");
-                System.out.printf("| Eletrônico | %-19s | %-20s | %-5.2f | %-12.0f |%n",
-                        eletronico.getTitulo(), eletronico.getAutores(), eletronico.getPreco(), eletronico.getTamanho());
-                System.out.println("+------------+---------------------+----------------------+-------+--------------+");
+                imprimirLivro("Eletrônico", encurtarTexto(eletronico.getTitulo(), 19), encurtarTexto(eletronico.getAutores(), 20), eletronico.getPreco(), eletronico.getTamanho());
             }
         }
 
+        System.out.println("+------------+---------------------+----------------------+-------+---------+");
+    }
 
-
-        if (livros.isEmpty()) {
-            System.out.println("Nenhum livro disponível.");
+    private String encurtarTexto(String texto, int maxLength) {
+        if (texto.length() <= maxLength) {
+            return texto;
+        } else {
+            return texto.substring(0, maxLength - 3) + "...";
         }
+    }
+
+    private void imprimirLivro(String tipo, String titulo, String autores, double preco, double parametro) {
+        System.out.printf("| %-10s | %-19s | %-20s | %-5.2f | %-7.0f |%n", tipo, titulo, autores, preco, parametro);
     }
 
 }
