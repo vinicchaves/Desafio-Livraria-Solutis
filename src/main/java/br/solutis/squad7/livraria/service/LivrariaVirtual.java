@@ -177,7 +177,7 @@ public class LivrariaVirtual {
             System.out.println("Venda realizada com sucesso!");
         }
     }
-        public void listarLivrosConsole() {
+    public void listarLivrosConsole() {
         listarLivros(livroService.listarTodosTipos());
     }
     public void listarLivrosImpressos() {

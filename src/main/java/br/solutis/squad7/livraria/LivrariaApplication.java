@@ -14,6 +14,7 @@ public class LivrariaApplication {
 				SpringApplication.run(LivrariaApplication.class, args);
 		MenuService menuService = configurableApplicationContext.getBean(MenuService.class);
 		menuService.iniciarMenu();
+		System.exit(0);
 	}
 }
 
