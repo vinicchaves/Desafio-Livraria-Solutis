@@ -19,7 +19,7 @@ public class LivrariaVirtual {
     private final int MAX_IMPRESSOS = 10;
     private final int MAX_ELETRONICOS = 20;
     private final int MAX_VENDAS = 50;
-   // private List<Venda> vendas;
+    // private List<Venda> vendas;
 
     @Autowired
     private LivroService livroService;
@@ -62,6 +62,7 @@ public class LivrariaVirtual {
 
     private boolean cadastrarLivroImpresso(Scanner sc) {
         sc.nextLine(); // limpar buffer
+        try {
         System.out.print("Digite o título do livro impresso: ");
         String titulo = sc.nextLine();
         System.out.print("Digite o autor(es) do livro impresso: ");
@@ -70,112 +71,159 @@ public class LivrariaVirtual {
         String editora = sc.nextLine();
         System.out.print("Digite o preço do livro impresso: ");
         float preco = sc.nextFloat();
+            if (preco < 0) {
+                System.out.println("O preço deve ser maior que zero.");
+                return false;
+            }
         System.out.print("Digite o frete do livro impresso: ");
         float frete = sc.nextFloat();
+            if (frete < 0) {
+                System.out.println("O frete não pode ser negativo.");
+                return false;
+            }
         System.out.print("Digite o estoque do livro impresso: ");
         int estoque = sc.nextInt();
+            if (estoque < 0) {
+                System.out.println("O estoque não pode ser negativo.");
+                return false;
+            }
 
         Impresso novoImpresso = new Impresso(titulo, autores, editora, preco, frete, estoque);
         livroService.cadastrarLivroImpresso(novoImpresso);
         System.out.println("Livro impresso cadastrado com sucesso!");
         return true;
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida. Certifique-se de inserir valores numéricos corretamente.");
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro inesperado.");
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private boolean cadastrarLivroEletronico(Scanner sc) {
         sc.nextLine(); // limpar buffer
-        System.out.print("Digite o título do livro eletrônico: ");
-        String titulo = sc.nextLine();
-        System.out.print("Digite o autor(es) do livro eletrônico: ");
-        String autores = sc.nextLine();
-        System.out.print("Digite a editora do livro eletrônico: ");
-        String editora = sc.nextLine();
-        System.out.print("Digite o preço do livro eletrônico: ");
-        float preco = sc.nextFloat();
-        System.out.print("Digite o tamanho do livro eletrônico: ");
-        float tamanho = sc.nextFloat();
+        try {
+            System.out.print("Digite o título do livro eletrônico: ");
+            String titulo = sc.nextLine();
+            System.out.print("Digite o autor(es) do livro eletrônico: ");
+            String autores = sc.nextLine();
+            System.out.print("Digite a editora do livro eletrônico: ");
+            String editora = sc.nextLine();
 
-        Eletronico novoEletronico = new Eletronico(titulo, autores, editora, preco, tamanho);
-        livroService.cadastrarLivroEletronico(novoEletronico);
-        System.out.println("Livro eletrônico cadastrado com sucesso!");
-        return true;
+            System.out.print("Digite o preço do livro eletrônico: ");
+                float preco = sc.nextFloat();
+                if (preco < 0) {
+                    System.out.println("O preço deve ser maior que zero. Tente novamente.");
+                    return false;
+                }
+
+
+            System.out.print("Digite o tamanho do livro eletrônico: ");
+            float tamanho = sc.nextFloat();
+            if (tamanho <= 0) {
+                System.out.println("O tamanho deve ser maior que zero. Tente novamente.");
+                return false;
+            }
+
+            Eletronico novoEletronico = new Eletronico(titulo, autores, editora, preco, tamanho);
+            livroService.cadastrarLivroEletronico(novoEletronico);
+            System.out.println("Livro eletrônico cadastrado com sucesso!");
+            return true;
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida. Certifique-se de inserir valores numéricos corretamente.");
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro inesperado.");
+            e.printStackTrace();
+        }
+return false;
     }
+
+
+
 
     @Transactional
     public void realizarVenda() {
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Digite o nome do cliente: ");
+            String cliente = sc.nextLine();
+            System.out.print("Quantidade de livros a ser comprado: ");
+            int qtdLivros = sc.nextInt();
+            System.out.print("Digite a opção de venda:\n1. Livro Impresso\n2. Livro Eletrônico\n3. Ambos\nEscolha uma opção: ");
+            int opcao = sc.nextInt();
 
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Digite o nome do cliente: ");
-        String cliente = sc.nextLine();
-        System.out.print("Quantidade de livros a ser comprado: ");
-        int qtdLivros = sc.nextInt();
-        System.out.print("Digite a opção de venda:\n1. Livro Impresso\n2. Livro Eletrônico\n3. Ambos\nEscolha uma opção: ");
-        int opcao = sc.nextInt();
+            if (opcao != 1 && opcao != 2 && opcao != 3) {
+                System.out.println("Opção inválida.");
+                return;
+            }
 
-        if (opcao != 1 && opcao != 2 && opcao != 3) {
-            System.out.println("Opção inválida.");
-            return;
-        }
+            List<Livro> livrosDisponiveis = new ArrayList<>();
+            if (opcao == 1 || opcao == 3) {
+                livrosDisponiveis.addAll(livroService.listarLivrosImpressos());
+            }
+            if (opcao == 2 || opcao == 3) {
+                livrosDisponiveis.addAll(livroService.listarLivrosEletronicos());
+            }
 
-        List<Livro> livrosDisponiveis = new ArrayList<>();
-        if (opcao == 1 || opcao == 3) {
-            livrosDisponiveis.addAll(livroService.listarLivrosImpressos());
-        }
-        if (opcao == 2 || opcao == 3) {
-            livrosDisponiveis.addAll(livroService.listarLivrosEletronicos());
-        }
+            if (livrosDisponiveis.isEmpty()) {
+                System.out.println("Não há livros disponíveis para venda.");
+                return;
+            }
 
-        if (livrosDisponiveis.isEmpty()) {
-            System.out.println("Não há livros disponíveis para venda.");
-            return;
-        }
-
-        System.out.println("Livros disponíveis:");
-        for (Livro livro : livrosDisponiveis) {
-            System.out.printf("[%d] %s\n", livro.getId(), livro.getTitulo());
-        }
-
-        Venda venda = new Venda();
-        venda.setCliente(cliente);
-
-        for (int i = 0; i < qtdLivros; i++) {
-            System.out.print("Digite o ID do livro: ");
-            int livroId = sc.nextInt();
-
-            Livro livroEscolhido = null;
+            System.out.println("Livros disponíveis:");
             for (Livro livro : livrosDisponiveis) {
-                if (livro.getId() == livroId) {
-                    livroEscolhido = livro;
-                    break;
-                }
+                System.out.printf("[%d] %s\n", livro.getId(), livro.getTitulo());
             }
 
-            if (livroEscolhido == null) {
-                System.out.println("Livro não encontrado.");
-                i--; // Tentar novamente
-            } else {
-                // Use o método merge para reanexar a entidade desconectada ao contexto de persistência
-                Livro livroGerenciado = entityManager.merge(livroEscolhido);
+            Venda venda = new Venda();
+            venda.setCliente(cliente);
 
-                if (livroGerenciado instanceof Impresso) {
-                    Impresso livroImpresso = (Impresso) livroGerenciado;
-                    if (livroImpresso.getEstoque() <= 0) {
-                        System.out.println("Livro impresso sem estoque.");
-                        i--; // Tentar novamente
-                    } else {
-                        venda.addLivro(livroImpresso, i);
-                        livroImpresso.atualizarEstoque();
+            for (int i = 0; i < qtdLivros; i++) {
+                System.out.print("Digite o ID do livro: ");
+                int livroId = sc.nextInt();
+
+                Livro livroEscolhido = null;
+                for (Livro livro : livrosDisponiveis) {
+                    if (livro.getId() == livroId) {
+                        livroEscolhido = livro;
+                        break;
                     }
-                } else if (livroGerenciado instanceof Eletronico) {
-                    venda.addLivro((Eletronico) livroGerenciado, i);
+                }
+
+                if (livroEscolhido == null) {
+                    System.out.println("Livro não encontrado.");
+                    i--; // Tentar novamente
+                } else {
+                    // Use o método merge para reanexar a entidade desconectada ao contexto de persistência
+                    Livro livroGerenciado = entityManager.merge(livroEscolhido);
+
+                    if (livroGerenciado instanceof Impresso) {
+                        Impresso livroImpresso = (Impresso) livroGerenciado;
+                        if (livroImpresso.getEstoque() <= 0) {
+                            System.out.println("Livro impresso sem estoque.");
+                            i--; // Tentar novamente
+                        } else {
+                            venda.addLivro(livroImpresso, i);
+                            livroImpresso.atualizarEstoque();
+                        }
+                    } else if (livroGerenciado instanceof Eletronico) {
+                        venda.addLivro((Eletronico) livroGerenciado, i);
+                    }
                 }
             }
+
+            if (!venda.listarLivros().isEmpty()) {
+                Venda vendaSalva = vendaService.salvarVenda(venda);
+                //vendas.add(vendaSalva);
+                System.out.println("Venda realizada com sucesso!");
+            }
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro inesperado.");
+            e.printStackTrace();
         }
 
-        if (!venda.listarLivros().isEmpty()) {
-            Venda vendaSalva = vendaService.salvarVenda(venda);
-            //vendas.add(vendaSalva);
-            System.out.println("Venda realizada com sucesso!");
-        }
+
     }
     public void listarLivrosConsole() {
         listarLivros(livroService.listarTodosTipos());
