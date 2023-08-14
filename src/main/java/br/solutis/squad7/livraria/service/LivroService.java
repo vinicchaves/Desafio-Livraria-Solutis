@@ -36,7 +36,9 @@ public class LivroService {
         return livroRepository.findImpressosBy(); // Supondo que você tenha um campo "tipo" no banco de dados para distinguir os tipos
     }
     public List<Livro> listarTodosTipos(){
-        return livroRepository.findAll();
+        List<Livro> listacompleta = livroRepository.findImpressosBy();
+        listacompleta.addAll(livroRepository.findEletronicosBy());
+        return listacompleta;
     }
 
     public List<Livro> listarLivrosEletronicos() {

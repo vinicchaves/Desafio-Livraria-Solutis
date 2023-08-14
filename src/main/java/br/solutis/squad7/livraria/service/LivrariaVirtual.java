@@ -3,7 +3,12 @@ import br.solutis.squad7.livraria.entity.Eletronico;
 import br.solutis.squad7.livraria.entity.Impresso;
 import br.solutis.squad7.livraria.entity.Livro;
 import br.solutis.squad7.livraria.entity.Venda;
+import br.solutis.squad7.livraria.repository.LivroRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,13 +19,19 @@ public class LivrariaVirtual {
     private final int MAX_IMPRESSOS = 10;
     private final int MAX_ELETRONICOS = 20;
     private final int MAX_VENDAS = 50;
-    private List<Venda> vendas;
+   // private List<Venda> vendas;
 
     @Autowired
     private LivroService livroService;
 
     @Autowired
     private VendaService vendaService;
+
+    @Autowired
+    LivroRepository livroRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     public void cadastrarLivro() {
@@ -89,6 +100,7 @@ public class LivrariaVirtual {
         return true;
     }
 
+    @Transactional
     public void realizarVenda() {
 
         Scanner sc = new Scanner(System.in);
@@ -100,11 +112,6 @@ public class LivrariaVirtual {
         int opcao = sc.nextInt();
 
         if (opcao != 1 && opcao != 2 && opcao != 3) {
-            System.out.println("Opção inválida.");
-            return;
-        }
-
-        if (opcao < 1 || opcao > 3) {
             System.out.println("Opção inválida.");
             return;
         }
@@ -146,8 +153,11 @@ public class LivrariaVirtual {
                 System.out.println("Livro não encontrado.");
                 i--; // Tentar novamente
             } else {
-                if (livroEscolhido instanceof Impresso) {
-                    Impresso livroImpresso = (Impresso) livroEscolhido;
+                // Use o método merge para reanexar a entidade desconectada ao contexto de persistência
+                Livro livroGerenciado = entityManager.merge(livroEscolhido);
+
+                if (livroGerenciado instanceof Impresso) {
+                    Impresso livroImpresso = (Impresso) livroGerenciado;
                     if (livroImpresso.getEstoque() <= 0) {
                         System.out.println("Livro impresso sem estoque.");
                         i--; // Tentar novamente
@@ -155,19 +165,19 @@ public class LivrariaVirtual {
                         venda.addLivro(livroImpresso, i);
                         livroImpresso.atualizarEstoque();
                     }
-                } else if (livroEscolhido instanceof Eletronico) {
-                    venda.addLivro((Eletronico) livroEscolhido, i);
+                } else if (livroGerenciado instanceof Eletronico) {
+                    venda.addLivro((Eletronico) livroGerenciado, i);
                 }
             }
         }
 
         if (!venda.listarLivros().isEmpty()) {
             Venda vendaSalva = vendaService.salvarVenda(venda);
-            vendas.add(vendaSalva);
+            //vendas.add(vendaSalva);
             System.out.println("Venda realizada com sucesso!");
         }
     }
-    public void listarLivrosConsole() {
+        public void listarLivrosConsole() {
         listarLivros(livroService.listarTodosTipos());
     }
     public void listarLivrosImpressos() {
@@ -204,7 +214,7 @@ public class LivrariaVirtual {
                         impresso.getTitulo(), impresso.getAutores(), impresso.getPreco(), impresso.getEstoque());
             } else if (livro instanceof Eletronico) {
                 Eletronico eletronico = (Eletronico) livro;
-                System.out.printf("| Eletrônico | %-17s | %-20s | %-5.2f |         | %-7.2f |%n",
+                System.out.printf("| Eletrônico | %-17s | %-20s | %-5.2f |         | %-7.0f |%n",
                         eletronico.getTitulo(), eletronico.getAutores(), eletronico.getPreco(), eletronico.getTamanho());
             }
         }
