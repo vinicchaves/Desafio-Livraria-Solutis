@@ -10,9 +10,9 @@ Este repositório contém o código fonte do projeto de uma Livraria Virtual, de
 
 ## Colaboradores
 
-- [@jcfbbernardo](https://github.com/jcfbbernardo)
 - [@p-oliveira7e](https://github.com/p-oliveira7e)
 - [@vinicchaves](https://github.com/vinicchaves)
+- [@jcfbbernardo](https://github.com/jcfbbernardo)
 
 ## Tecnologias Utilizadas
 
