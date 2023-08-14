@@ -5,7 +5,7 @@ Este repositório contém o código fonte do projeto de uma Livraria Virtual, de
 
 ## Diagrama de Classes UML
 
-![Diagrama de Classes](src/diagrama.png)
+![Diagrama de Classes](src/diagrama.jpg)
 
 
 ## Colaboradores
