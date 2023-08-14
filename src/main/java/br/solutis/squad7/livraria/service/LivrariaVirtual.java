@@ -196,8 +196,7 @@ public class LivrariaVirtual {
             venda.setCliente(cliente);
 
             for (int i = 0; i < qtdLivros; i++) {
-                System.out.print("Digite o ID do livro: ");
-                int livroId = sc.nextInt();
+                int livroId = LeituraUtil.lerIntPositivo(sc, "Digite o ID do livro: ");
 
                 Livro livroEscolhido = null;
                 for (Livro livro : livrosDisponiveis) {
