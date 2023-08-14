@@ -58,89 +58,105 @@ public class LivrariaVirtual {
             return;
         }
     }
+    private String lerString(Scanner sc, String mensagem) {
+        System.out.print(mensagem);
+        return sc.nextLine();
+    }
 
+    private float lerFloatPositivo(Scanner sc, String mensagem) {
+        while (true) {
+            System.out.print(mensagem);
+            if (sc.hasNextFloat()) {
+                float valor = sc.nextFloat();
+                if (valor >= 0) {
+                    return valor;
+                } else {
+                    System.out.println("O valor deve ser maior ou igual a zero.");
+                }
+            } else {
+                System.out.println("Entrada inválida. Certifique-se de inserir um valor numérico.");
+                sc.next();
+            }
+        }
+    }
+
+    private int lerIntPositivo(Scanner sc, String mensagem) {
+        while (true) {
+            System.out.print(mensagem);
+            if (sc.hasNextInt()) {
+                int valor = sc.nextInt();
+                if (valor >= 0) {
+                    return valor;
+                } else {
+                    System.out.println("O valor deve ser maior ou igual a zero.");
+                }
+            } else {
+                System.out.println("Entrada inválida. Certifique-se de inserir um valor numérico inteiro.");
+                sc.next();
+            }
+        }
+    }
 
     private boolean cadastrarLivroImpresso(Scanner sc) {
-        sc.nextLine(); // limpar buffer
-        try {
-        System.out.print("Digite o título do livro impresso: ");
-        String titulo = sc.nextLine();
-        System.out.print("Digite o autor(es) do livro impresso: ");
-        String autores = sc.nextLine();
-        System.out.print("Digite a editora do livro impresso: ");
-        String editora = sc.nextLine();
-        System.out.print("Digite o preço do livro impresso: ");
-        float preco = sc.nextFloat();
-            if (preco < 0) {
-                System.out.println("O preço deve ser maior que zero.");
-                return false;
-            }
-        System.out.print("Digite o frete do livro impresso: ");
-        float frete = sc.nextFloat();
-            if (frete < 0) {
-                System.out.println("O frete não pode ser negativo.");
-                return false;
-            }
-        System.out.print("Digite o estoque do livro impresso: ");
-        int estoque = sc.nextInt();
-            if (estoque < 0) {
-                System.out.println("O estoque não pode ser negativo.");
-                return false;
-            }
+        sc.nextLine(); // Limpar buffer
+        boolean entradaValida = false;
 
-        Impresso novoImpresso = new Impresso(titulo, autores, editora, preco, frete, estoque);
-        livroService.cadastrarLivroImpresso(novoImpresso);
-        System.out.println("Livro impresso cadastrado com sucesso!");
-        return true;
-        } catch (InputMismatchException e) {
-            System.out.println("Entrada inválida. Certifique-se de inserir valores numéricos corretamente.");
-        } catch (Exception e) {
-            System.out.println("Ocorreu um erro inesperado.");
-            e.printStackTrace();
+        while (!entradaValida) {
+            try {
+                String titulo = lerString(sc, "Digite o título do livro impresso: ");
+                String autores = lerString(sc, "Digite o autor(es) do livro impresso: ");
+                String editora = lerString(sc, "Digite a editora do livro impresso: ");
+
+                float preco = lerFloatPositivo(sc, "Digite o preço do livro impresso: ");
+                float frete = lerFloatPositivo(sc, "Digite o frete do livro impresso: ");
+                int estoque = lerIntPositivo(sc, "Digite o estoque do livro impresso: ");
+
+                Impresso novoImpresso = new Impresso(titulo, autores, editora, preco, frete, estoque);
+                livroService.cadastrarLivroImpresso(novoImpresso);
+                System.out.println("Livro impresso cadastrado com sucesso!");
+                entradaValida = true;
+                return true;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Certifique-se de inserir valores numéricos corretamente.");
+                sc.nextLine(); // Limpar o buffer após a exceção
+            } catch (Exception e) {
+                System.out.println("Ocorreu um erro inesperado.");
+                e.printStackTrace();
+                entradaValida = true;
+            }
         }
         return false;
     }
 
     private boolean cadastrarLivroEletronico(Scanner sc) {
-        sc.nextLine(); // limpar buffer
-        try {
-            System.out.print("Digite o título do livro eletrônico: ");
-            String titulo = sc.nextLine();
-            System.out.print("Digite o autor(es) do livro eletrônico: ");
-            String autores = sc.nextLine();
-            System.out.print("Digite a editora do livro eletrônico: ");
-            String editora = sc.nextLine();
+        sc.nextLine(); // Limpar buffer
+        boolean entradaValida = false;
 
-            System.out.print("Digite o preço do livro eletrônico: ");
-                float preco = sc.nextFloat();
-                if (preco < 0) {
-                    System.out.println("O preço deve ser maior que zero. Tente novamente.");
-                    return false;
-                }
+        while (!entradaValida) {
+            try {
+                String titulo = lerString(sc, "Digite o título do livro eletrônico: ");
+                String autores = lerString(sc, "Digite o autor(es) do livro eletrônico: ");
+                String editora = lerString(sc, "Digite a editora do livro eletrônico: ");
 
+                float preco = lerFloatPositivo(sc, "Digite o preço do livro eletrônico: ");
+                float tamanho = lerFloatPositivo(sc, "Digite o tamanho do livro eletrônico: ");
 
-            System.out.print("Digite o tamanho do livro eletrônico: ");
-            float tamanho = sc.nextFloat();
-            if (tamanho <= 0) {
-                System.out.println("O tamanho deve ser maior que zero. Tente novamente.");
-                return false;
+                Eletronico novoEletronico = new Eletronico(titulo, autores, editora, preco, tamanho);
+                livroService.cadastrarLivroEletronico(novoEletronico);
+                System.out.println("Livro eletrônico cadastrado com sucesso!");
+                entradaValida = true;
+                return true;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Certifique-se de inserir valores numéricos corretamente.");
+                sc.nextLine();
+            } catch (Exception e) {
+                System.out.println("Ocorreu um erro inesperado.");
+                e.printStackTrace();
+                entradaValida = true;
             }
-
-            Eletronico novoEletronico = new Eletronico(titulo, autores, editora, preco, tamanho);
-            livroService.cadastrarLivroEletronico(novoEletronico);
-            System.out.println("Livro eletrônico cadastrado com sucesso!");
-            return true;
-        } catch (InputMismatchException e) {
-            System.out.println("Entrada inválida. Certifique-se de inserir valores numéricos corretamente.");
-        } catch (Exception e) {
-            System.out.println("Ocorreu um erro inesperado.");
-            e.printStackTrace();
         }
-return false;
+        return false;
     }
-
-
-
 
     @Transactional
     public void realizarVenda() {
