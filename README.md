@@ -37,13 +37,13 @@ O projeto tem como objetivo criar uma plataforma de gerenciamento para uma livra
 1. Clone o repositório:
 
 ```
-git clone https://github.com/SEU_USUARIO/livraria.git
+git clone https://github.com/vinicchaves/desafio-livraria-solutis.git
 ```
 
 2. Acesse o diretório do projeto:
 
 ```
-cd livraria
+cd desafio-livraria-solutis
 ```
 
 3. Crie um banco de dados MySQL chamado `livraria`:
